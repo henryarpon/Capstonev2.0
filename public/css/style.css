@@ -1,6 +1,7 @@
 
 
 
+/* Landing Page */
 
 .landingmessage {
     
@@ -23,3 +24,26 @@ h3 {
     margin-top: 50px;
     margin-right: 50px;
 }
+
+
+/* Gallery */
+
+#image-gallery {
+    margin-top: 10px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .image-row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 50%;
+  }
+  
+  .image-item {
+    width: 50%;
+    height: 100%;
+    object-fit: cover;
+  }
