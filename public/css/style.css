@@ -3,6 +3,52 @@
 
 /* Landing Page */
 
+body {
+  background-color: #f2f2f2;
+  font-family: sans-serif;
+  /* padding: 2rem; */
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.image {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+.button {
+  background-color: #0d6feb;
+  border: none;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* 
 .landingmessage {
     
     color: navy;
@@ -23,7 +69,7 @@ h3 {
 
     margin-top: 50px;
     margin-right: 50px;
-}
+} */
 
 
 /* Gallery */
@@ -47,3 +93,7 @@ h3 {
     height: 100%;
     object-fit: cover;
   }
+
+  /* Login Form */
+
+ 

@@ -1,0 +1,28 @@
+<%- include('partials/header') -%>
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-3" style="margin-top: 100px; height: 400px;">
+        <div class="card">
+          <div class="card-header">
+            <h4>Login Form</h4>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="form-group" style="margin-bottom: 15px;">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" />
+              </div>
+              <div class="form-group" style="margin-bottom: 15px;">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" />
+              </div>
+              <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<%- include('partials/footer'); -%>

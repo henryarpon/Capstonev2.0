@@ -20,6 +20,11 @@ app.get('/gallery', (req, res) => {
    res.render('gallery');
 }); 
 
+app.get('/login', (req, res) => {
+   res.render('login');
+}); 
+
+
 app.listen(3000, () => {
      console.log('Server started at port 3000')
 });
