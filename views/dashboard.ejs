@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Side Nav</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="#">Account Manager</a>
+    <a href="#">Content Manager</a>
+    <a href="#">Inventory</a>
+    <a href="#">Dashboard</a>
+    <a href="#">Log-out</a>
+</div>
+
+<div id="main">
+    
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;Menu</span>
+    <h2 class="h2dashboard">Dashboard</h2>
+    
+</div>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+    }
+</script>
+
+</body>
+</html>
