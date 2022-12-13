@@ -1,0 +1,19 @@
+.module-selector {
+    display: flex;
+  }
+  
+  .module-btn {
+    padding: 10px 20px;
+    border: 1px solid #000;
+    background: #f0f0f0;
+  }
+  
+  .module-content {
+    margin-top: 20px;
+  }
+  
+  .module-section {
+    padding: 10px;
+    border: 1px solid #000;
+    background: #f0f0f0;
+  }
