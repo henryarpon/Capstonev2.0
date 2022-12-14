@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
+const User = require('./models/user-model');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const app = express();
@@ -28,14 +29,14 @@ mongoose.connect('mongodb://localhost:27017/userDBase', {useNewUrlParser: true})
 
 
 
-const userSchema = new mongoose.Schema( {
-   email: String,
-   password: String
-}); 
+// const userSchema = new mongoose.Schema( {
+//    email: String,
+//    password: String
+// }); 
 
-userSchema.plugin(passportLocalMongoose);
+// userSchema.plugin(passportLocalMongoose);
 
-const User = mongoose.model('User', userSchema);
+// const User = mongoose.model('User', userSchema);
 
 passport.use(User.createStrategy());
 
