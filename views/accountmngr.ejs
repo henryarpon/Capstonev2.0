@@ -21,49 +21,61 @@
     <section id="createUserSection" class="hide">
       <h2>Create User</h2>
       <form>
-        <label>Username</label>
-        <input type="text" name="username">
-        <label>Email</label>
-        <input type="email" name="email">
-        <label>Password</label>
-        <input type="password" name="password">
-        <button type="submit">Create User</button>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" class="form-control" name="username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Create User</button>
       </form>
     </section>
     <section id="editUserSection" class="hide">
       <h2>Edit User</h2>
       <form>
-        <label>Username</label>
-        <input type="text" name="username">
-        <label>Email</label>
-        <input type="email" name="email">
-        <label>Password</label>
-        <input type="password" name="password">
-        <button type="submit">Edit User</button>
-      </form>
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" class="form-control" name="username">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Edit User</button>
+    </form>
     </section>
     <section id="deleteUserSection" class="hide">
       <h2>Delete User</h2>
       <form>
-        <label>Username</label>
-        <select name="username">
-          <option value="">Select a user...</option>
-          <option value="john">John</option>
-          <option value="jane">Jane</option>
-        </select>
-        <button type="submit">Delete User</button>
+        <div class="form-group pb-3">
+          <label>Username</label>
+          <select class="form-control" name="username">
+            <option value="">Select a user...</option>
+            <option value="john">John</option>
+            <option value="jane">Jane</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Delete User</button>
       </form>
     </section>
     <section id="changePasswordSection" class="hide">
       <h2>Change Admin Password</h2>
       <form>
-        <label>Current Password</label>
-        <input type="password" name="currentPassword">
-        <label>New Password</label>
-        <input type="password" name="newPassword">
-        <label>Confirm Password</label>
-        <input type="password" name="confirmPassword">
-        <button type="submit">Change Password</button>
+        <div class="form-group">
+          <label>Current Password</label>
+          <input type="password" name="currentPassword" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>New Password</label>
+          <input type="password" name="newPassword" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" name="confirmPassword" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Change Password</button>
       </form>
     </section>
   </main>
