@@ -43,11 +43,18 @@ passport.use(User.createStrategy());
 passport.serializeUser(function(user, done) { // modify serializeUser() method
   done(null, user.id);
 });
+
+// passport.deserializeUser(function(id, done) {
+//   User.findById(id, function(err, user) {
+//     done(err, user);
+//   });
+// });
+
 passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
+   User.findById(id, function(err, user) {
+     done(err, user);
+   }).select('userType');
+ });
 
 //GET request 
 
@@ -67,8 +74,16 @@ app.get('/dashboard', (req, res) => {
    res.render('dashboard');
 }); 
 
+// app.get('/accountmngr', (req, res) => {
+//    res.render('accountmngr');
+// }); 
+
 app.get('/accountmngr', (req, res) => {
-   res.render('accountmngr');
+   if (req.user.userType === 'admin') {
+      res.render('accountmngr');
+   } else {
+      res.render('restricted');
+   }
 }); 
 
 app.get('/contentmngr', (req, res) => {
@@ -98,8 +113,20 @@ app.get('/register', (req, res) => {
 
 //POST request 
 
-app.post('/register', (req, res) => {
-   User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
+// app.post('/register', (req, res) => {
+//    User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
+//      if (err) {
+//        console.log(err);
+//        return res.render('register');
+//      }
+//      passport.authenticate('local')(req, res, () => {
+//        res.redirect('/dashboard');
+//      });
+//    });
+//  });
+
+ app.post('/register', (req, res) => {
+   User.register({ username: req.body.username, userType: req.body.userType }, req.body.password, (err, user) => {
      if (err) {
        console.log(err);
        return res.render('register');
@@ -110,6 +137,17 @@ app.post('/register', (req, res) => {
    });
  });
 
+//  app.post('/createaccount', (req, res) => {
+//    User.register({ username: req.body.username, userType: req.body.userType }, req.body.password, (err, user) => {
+//      if (err) {
+//        console.log(err);
+//        return res.render('register');
+//      }
+//      passport.authenticate('local')(req, res, () => {
+//        res.redirect('/dashboard');
+//      });
+//    });
+//  });
 
 
 app.post('/login', (req, res) => {
