@@ -8,6 +8,9 @@ const session = require('express-session');
 const passport = require('passport');
 const User = require('./models/user-model');
 const passportLocalMongoose = require('passport-local-mongoose');
+const deleteUser = require('./deleteUser');
+
+
 
 const app = express();
 mongoose.set('strictQuery', false);
@@ -28,28 +31,19 @@ app.use(session({
 mongoose.connect('mongodb://localhost:27017/userDBase', {useNewUrlParser: true});
 
 
-
-// const userSchema = new mongoose.Schema( {
-//    email: String,
-//    password: String
-// }); 
-
-// userSchema.plugin(passportLocalMongoose);
-
-// const User = mongoose.model('User', userSchema);
-
 passport.use(User.createStrategy());
 
 passport.serializeUser(function(user, done) { // modify serializeUser() method
   done(null, user.id);
 });
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
 
-//GET request 
+passport.deserializeUser(function(id, done) {
+   User.findById(id, function(err, user) {
+     done(err, user);
+   }).select('userType');
+ });
+
+//GET request -- visitor access
 
 app.get('/', (req, res) => {
    res.render('home');
@@ -63,22 +57,49 @@ app.get('/login', (req, res) => {
    res.render('login');
 }); 
 
+//GET request user/admin only access
 app.get('/dashboard', (req, res) => {
-   res.render('dashboard');
-}); 
+   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'user')) {
+      res.render('dashboard');
+   } else {
+      res.render('noneuser');
+   }
+});
 
+//GET request admin only access
 app.get('/accountmngr', (req, res) => {
-   res.render('accountmngr');
-}); 
+   if (req.user.userType === 'admin') {
+      User.find({}, (err, users) => {
+         if (err) {
+            console.log(err);
+         } else {
+            res.render('accountmngr', {users: users});
+         }
+      });
+   } else {
+      res.render('restricted');
+   }
+});
 
+//GET request user/admin only access
 app.get('/contentmngr', (req, res) => {
-   res.render('contentmngr');
+   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'user')) {
+      res.render('contentmngr');
+   } else {
+      res.render('noneuser');
+   }
 }); 
 
+//GET request user/admin only access
 app.get('/inventorymngr', (req, res) => {
-   res.render('inventorymngr');
+   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'user')) {
+      res.render('inventorymngr');
+   } else {
+      res.render('noneuser');
+   }
 }); 
 
+//GET request logout function
 app.get('/logout', (req, res) => {
    req.logout(err => {
       if (err) {
@@ -89,28 +110,19 @@ app.get('/logout', (req, res) => {
    });
 }); 
 
-app.get('/register', (req, res) => {
-   res.render('register');
-}); 
+
+//POST Request 
 
 
-
-
-//POST request 
-
-app.post('/register', (req, res) => {
-   User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
-     if (err) {
-       console.log(err);
-       return res.render('register');
-     }
-     passport.authenticate('local')(req, res, () => {
-       res.redirect('/dashboard');
-     });
-   });
- });
-
-
+app.post('/createAccount', (req, res) => {
+   User.register({ username: req.body.username, userType: req.body.userType }, req.body.password, (err, user) => {
+      if (err) {
+        console.log(err);
+        return res.render('register');
+      }
+      res.redirect('/dashboard');
+    });
+});
 
 app.post('/login', (req, res) => {
    const user = new User({
@@ -130,6 +142,7 @@ app.post('/login', (req, res) => {
    });
 }); 
 
+app.post('/deleteUser', deleteUser);
 
 app.listen(3000, () => {
      console.log('Server started at port 3000')
