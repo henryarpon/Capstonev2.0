@@ -43,7 +43,7 @@ passport.deserializeUser(function(id, done) {
    }).select('userType');
  });
 
-//GET request 
+//GET request -- visitor access
 
 app.get('/', (req, res) => {
    res.render('home');
@@ -57,11 +57,16 @@ app.get('/login', (req, res) => {
    res.render('login');
 }); 
 
+//GET request user/admin only access
 app.get('/dashboard', (req, res) => {
-   res.render('dashboard');
-}); 
+   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'user')) {
+      res.render('dashboard');
+   } else {
+      res.render('noneuser');
+   }
+});
 
-
+//GET request admin only access
 app.get('/accountmngr', (req, res) => {
    if (req.user.userType === 'admin') {
       User.find({}, (err, users) => {
@@ -76,14 +81,25 @@ app.get('/accountmngr', (req, res) => {
    }
 });
 
+//GET request user/admin only access
 app.get('/contentmngr', (req, res) => {
-   res.render('contentmngr');
+   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'user')) {
+      res.render('contentmngr');
+   } else {
+      res.render('noneuser');
+   }
 }); 
 
+//GET request user/admin only access
 app.get('/inventorymngr', (req, res) => {
-   res.render('inventorymngr');
+   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'user')) {
+      res.render('inventorymngr');
+   } else {
+      res.render('noneuser');
+   }
 }); 
 
+//GET request logout function
 app.get('/logout', (req, res) => {
    req.logout(err => {
       if (err) {
