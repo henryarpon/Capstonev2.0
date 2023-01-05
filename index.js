@@ -39,7 +39,7 @@ passport.serializeUser(function(user, done) { // modify serializeUser() method
 passport.deserializeUser(function(id, done) {
    User.findById(id, function(err, user) {
      done(err, user);
-   }).select('userType');
+   }).select('userType username');
  });
 
 //GET request -- visitor access
@@ -56,14 +56,6 @@ app.get('/login', (req, res) => {
    res.render('login');
 }); 
 
-//GET request user/admin only access
-app.get('/dashboard', (req, res) => {
-   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'basicuser')) {
-      res.render('dashboard');
-   } else {
-      res.render('noneuser');
-   }
-});
 
 //GET request admin only access
 app.get('/accountmngr', (req, res) => {
@@ -72,7 +64,7 @@ app.get('/accountmngr', (req, res) => {
          if (err) {
             console.log(err);
          } else {
-            res.render('accountmngr', {users: users});
+            res.render('accountmngr', {users: users,username: req.user.username});
          }
       });
    } else {
@@ -81,9 +73,20 @@ app.get('/accountmngr', (req, res) => {
 });
 
 //GET request user/admin only access
+app.get('/dashboard', (req, res) => {
+   
+   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'basicuser')) {
+      res.render('dashboard', {username: req.user.username});
+      
+   } else {
+      res.render('noneuser');
+   }
+});
+
+//GET request user/admin only access
 app.get('/contentmngr', (req, res) => {
    if (req.user && (req.user.userType === 'admin' || req.user.userType === 'basicuser')) {
-      res.render('contentmngr');
+      res.render('contentmngr', {username: req.user.username});
    } else {
       res.render('noneuser');
    }
@@ -92,7 +95,7 @@ app.get('/contentmngr', (req, res) => {
 //GET request user/admin only access
 app.get('/inventorymngr', (req, res) => {
    if (req.user && (req.user.userType === 'admin' || req.user.userType === 'basicuser')) {
-      res.render('inventorymngr');
+      res.render('inventorymngr', {username: req.user.username});
    } else {
       res.render('noneuser');
    }
