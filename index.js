@@ -11,7 +11,6 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const deleteUser = require('./deleteUser');
 
 
-
 const app = express();
 mongoose.set('strictQuery', false);
 
@@ -59,7 +58,7 @@ app.get('/login', (req, res) => {
 
 //GET request user/admin only access
 app.get('/dashboard', (req, res) => {
-   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'user')) {
+   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'basicuser')) {
       res.render('dashboard');
    } else {
       res.render('noneuser');
@@ -83,7 +82,7 @@ app.get('/accountmngr', (req, res) => {
 
 //GET request user/admin only access
 app.get('/contentmngr', (req, res) => {
-   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'user')) {
+   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'basicuser')) {
       res.render('contentmngr');
    } else {
       res.render('noneuser');
@@ -92,7 +91,7 @@ app.get('/contentmngr', (req, res) => {
 
 //GET request user/admin only access
 app.get('/inventorymngr', (req, res) => {
-   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'user')) {
+   if (req.user && (req.user.userType === 'admin' || req.user.userType === 'basicuser')) {
       res.render('inventorymngr');
    } else {
       res.render('noneuser');
@@ -113,17 +112,6 @@ app.get('/logout', (req, res) => {
 
 //POST Request 
 
-
-app.post('/createAccount', (req, res) => {
-   User.register({ username: req.body.username, userType: req.body.userType }, req.body.password, (err, user) => {
-      if (err) {
-        console.log(err);
-        return res.render('register');
-      }
-      res.redirect('/dashboard');
-    });
-});
-
 app.post('/login', (req, res) => {
    const user = new User({
       username: req.body.username,
@@ -141,6 +129,36 @@ app.post('/login', (req, res) => {
       }
    });
 }); 
+
+app.post('/createAccount', (req, res) => {
+   User.register({ username: req.body.username, userType: req.body.userType }, req.body.password, (err, user) => {
+      if (err) {
+        console.log(err);
+        return res.render('register');
+      }
+      res.redirect('/dashboard');
+    });
+});
+
+app.post('/changePassword', (req, res) => {
+   const query = { username: req.body.username };
+   
+   User.findOne(query, (err, user) => {
+     if (err) return res.send(500, { error: err });
+
+     // Use passport-local-mongoose's setPassword() method to update the salted and hashed password
+     user.setPassword(req.body.password, (err) => {
+       if (err) return res.send(500, { error: err });
+
+       // Save the updated user object
+       user.save((err, result) => {
+         if (err) return res.send(500, { error: err });
+
+         res.redirect('/dashboard');
+       });
+     });
+   });
+ });
 
 app.post('/deleteUser', deleteUser);
 
