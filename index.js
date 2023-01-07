@@ -7,8 +7,10 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const User = require('./models/user-model');
+const Content = require('./models/content-model');
 const passportLocalMongoose = require('passport-local-mongoose');
 const deleteUser = require('./deleteUser');
+const flash = require('connect-flash'); 
 
 
 const app = express();
@@ -16,7 +18,10 @@ mongoose.set('strictQuery', false);
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs'); 
+app.use(flash());
 app.use(bodyParser.urlencoded({extended: true})); 
+
+
 
 app.use(session({
    secret: 'This is a top secret', // change session secret
@@ -86,7 +91,7 @@ app.get('/dashboard', (req, res) => {
 //GET request user/admin only access
 app.get('/contentmngr', (req, res) => {
    if (req.user && (req.user.userType === 'admin' || req.user.userType === 'basicuser')) {
-      res.render('contentmngr', {username: req.user.username});
+      res.render('contentmngr', {username: req.user.username, message: req.flash('success')});
    } else {
       res.render('noneuser');
    }
@@ -115,6 +120,8 @@ app.get('/logout', (req, res) => {
 
 //POST Request 
 
+
+//POST Request for Authentication 
 app.post('/login', (req, res) => {
    const user = new User({
       username: req.body.username,
@@ -133,6 +140,8 @@ app.post('/login', (req, res) => {
    });
 }); 
 
+
+//POST Request for Account management module
 app.post('/createAccount', (req, res) => {
    User.register({ username: req.body.username, userType: req.body.userType }, req.body.password, (err, user) => {
       if (err) {
@@ -164,6 +173,25 @@ app.post('/changePassword', (req, res) => {
  });
 
 app.post('/deleteUser', deleteUser);
+
+//POST Request for Content Management module
+
+ app.post('/createContent', (req, res) => {
+   const newContent = new Content({
+     title: req.body.title,
+     content: req.body.content,
+     image: req.body.image
+   });
+   newContent.save((err, content) => {
+     if (err) {
+       console.log(err);
+     } else {
+      req.flash('success', 'Content was posted!'); 
+      res.render('contentmngr', {username: req.user.username, message: req.flash('success')});
+     }
+   });
+ });
+
 
 app.listen(3000, () => {
      console.log('Server started at port 3000')
